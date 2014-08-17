@@ -8,8 +8,11 @@
 
 #import "ExpandTableView.h"
 #import "ParentTableViewCell.h"
+#import "ChildTableViewCell.h"
 
 @implementation ExpandTableView
+
+#define HEIGHT_FOR_CELL 44.0
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -26,6 +29,10 @@
     self = [super initWithCoder:aDecoder];
     if(self){
         self.dataSource = self;
+        self.delegate = self;
+        
+        self.allowsSelection = NO;
+        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     }
     
     return  self;
@@ -39,7 +46,7 @@
 }
 */
 
-
+#pragma mark - UITableViewDataSouce
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 2;
@@ -72,15 +79,17 @@
         
     }else {
         
-        NSString *identifier = @"UITableViewCell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        NSString *identifier = @"childCell";
+        ChildTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         if(cell == nil){
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+            cell = [[ChildTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
         }
         
         
-        //        cell.textLabel.text = @"nomal cell";
-        cell.backgroundColor = [UIColor greenColor];
+//        cell.textLabel.text = [[NSString alloc] initWithFormat:@"My name is:%@", cell.name];
+//        cell.backgroundColor = [UIColor greenColor];
+        
+        cell.childNum = 2;
         
         return cell;
         
@@ -88,5 +97,19 @@
     }
     
 }
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    long row = indexPath.row;
+    
+    if(row == 0) return HEIGHT_FOR_CELL;
+    if(row == 1) return 2 * HEIGHT_FOR_CELL;
+    
+    return HEIGHT_FOR_CELL;
+    
+}
+
 
 @end

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ExpandTableView : UITableView <UITableViewDataSource>
+@interface ExpandTableView : UITableView <UITableViewDataSource, UITableViewDelegate>
 
 @end
