@@ -33,6 +33,10 @@
         
         self.allowsSelection = NO;
         self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        
+        UIView *footer = [[UIView alloc] initWithFrame:CGRectZero];
+        self.tableFooterView = footer;
+
     }
     
     return  self;
