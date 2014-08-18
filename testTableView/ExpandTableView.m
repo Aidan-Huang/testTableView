@@ -11,8 +11,8 @@
 #import "ChildTableViewCell.h"
 
 @implementation ExpandTableView
-
 #define HEIGHT_FOR_CELL 44.0
+
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -31,11 +31,12 @@
         self.dataSource = self;
         self.delegate = self;
         
-        self.allowsSelection = NO;
         self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         
         UIView *footer = [[UIView alloc] initWithFrame:CGRectZero];
         self.tableFooterView = footer;
+        
+        self.array = [NSMutableArray arrayWithObjects:@"1", @"2",nil];
 
     }
     
@@ -53,7 +54,7 @@
 #pragma mark - UITableViewDataSouce
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 2;
+    return [self.array count];
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -69,8 +70,9 @@
             cell = [[ParentTableViewCell alloc] initWithReuseIdentifier:identifier];
         }
         
-        [cell setCellBackgroundColor:[UIColor redColor]];
-        
+        [cell setCellBackgroundColor:[UIColor clearColor]];
+
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         cell.label.text = [[NSString alloc] initWithFormat:@"My name is:%@", cell.name];
         
@@ -81,7 +83,7 @@
         
         return cell;
         
-    }else {
+    }else{
         
         NSString *identifier = @"childCell";
         ChildTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -96,9 +98,8 @@
         cell.childNum = 2;
         
         return cell;
-        
-        
     }
+    
     
 }
 
@@ -113,6 +114,40 @@
     
     return HEIGHT_FOR_CELL;
     
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    long row = indexPath.row;
+    
+    if(row == 0)
+    {
+//        NSLog(@"parent");
+        
+        if([self.array count] == 1){
+            [self.array addObject:@"2"];
+            
+            NSArray *insertArray = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]];
+            
+            [self insertRowsAtIndexPaths:insertArray withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+
+            
+        }else if([self.array count] == 2){
+            
+            [self.array removeObjectAtIndex:row];
+            
+            NSArray *deleteArray = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]];
+            
+            [self deleteRowsAtIndexPaths:deleteArray withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+        }
+        
+       
+    }
+    if(row == 1){
+        NSLog(@"child");
+    }
 }
 
 

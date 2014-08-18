@@ -10,4 +10,6 @@
 
 @interface ExpandTableView : UITableView <UITableViewDataSource, UITableViewDelegate>
 
+@property (strong, nonatomic) NSMutableArray *array;
+
 @end
